@@ -18,7 +18,7 @@
         // =========================================================
         // REEMPLAZA ESTOS DATOS CON TU CONFIGURACIÓN DE FIREBASE
         // =========================================================
-        const firebaseConfig = {
+       const firebaseConfig = {
             apiKey: "AIzaSyDLglQFUMLhHOHQ6Q6FEE09YRm08jj_w7Y",
             authDomain: "monitoreo-cloro-hidalgo.firebaseapp.com",
             projectId: "monitoreo-cloro-hidalgo",
@@ -26,11 +26,11 @@
             messagingSenderId: "345501672081",
             appId: "1:345501672081:web:44e0348f26aeba506a9530"
         };
-
+        
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Hacer globales las funciones para usarlas en el HTML
+        // Funciones globales para interactuar con la base de datos
         window.guardarEnFirebase = async function(datos) {
             try {
                 await addDoc(collection(db, "monitoreo_cloro"), datos);
@@ -57,7 +57,7 @@
     </script>
 
     <style>
-        :root { --primary-color: #0056b3; --bg-color: #f4f7f6; }
+        :root { --primary-color: #0056b3; --success-color: #28a745; --bg-color: #f4f7f6; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg-color); display: flex; flex-direction: column; min-height: 100vh; }
         header { background-color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary-color); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         header h1 { margin: 0; font-size: 20px; color: var(--primary-color); }
@@ -69,8 +69,9 @@
         
         .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 50px; }
         button { background-color: var(--primary-color); color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        button:hover { background-color: #004494; }
+        button:hover { opacity: 0.9; }
         .btn-back { background-color: #6c757d; margin-bottom: 20px; }
+        .btn-csv { background-color: var(--success-color); font-weight: bold; }
         
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .form-group { display: flex; flex-direction: column; }
@@ -78,7 +79,9 @@
         input, select, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; }
         
         .filters-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; background: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .results-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        
+        .results-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-top: 20px; }
         #map { height: 400px; width: 100%; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .chart-container, .table-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -93,7 +96,7 @@
 
     <header>
         <h1>Servicio Nacional de Salud Pública de Hidalgo</h1>
-        <img src="Logo SNSP ok 2026.png" alt="Logo de Salud" class="logo">
+        <img src="https://via.placeholder.com/150x50?text=LOGO+SALUD" alt="Logo de Salud" class="logo">
     </header>
 
     <main>
@@ -135,90 +138,18 @@
                         <label>2. Municipio</label>
                         <select id="municipio" required>
                             <option value="">Seleccione...</option>
-                            <option value="Acatlán">Acatlán</option>
-                            <option value="Acaxochitlán">Acaxochitlán</option>
-                            <option value="Actopan">Actopan</option>
-                            <option value="Agua Blanca">Agua Blanca</option>
-                            <option value="Ajacuba">Ajacuba</option>
-                            <option value="Alfajayucan">Alfajayucan</option>
-                            <option value="Almoloya">Almoloya</option>
-                            <option value="Apan">Apan</option>
-                            <option value="Atitalaquia">Atitalaquia</option>
-                            <option value="Atlapexco">Atlapexco</option>
-                            <option value="Atotonilco de Tula">Atotonilco de Tula</option>
-                            <option value="Atotonilco El Grande">Atotonilco El Grande</option>
-                            <option value="Calnali">Calnali</option>
-                            <option value="Cardonal">Cardonal</option>
-                            <option value="Chapantongo">Chapantongo</option>
-                            <option value="Chapulhuacán">Chapulhuacán</option>
-                            <option value="Chilcuautla">Chilcuautla</option>
-                            <option value="Cuautepec de Hinojosa">Cuautepec de Hinojosa</option>
-                            <option value="El Arenal">El Arenal</option>
-                            <option value="Eloxochitlán">Eloxochitlán</option>
-                            <option value="Emiliano Zapata">Emiliano Zapata</option>
-                            <option value="Epazoyucan">Epazoyucan</option>
-                            <option value="Francisco I. Madero">Francisco I. Madero</option>
-                            <option value="Huasca de Ocampo">Huasca de Ocampo</option>
-                            <option value="Huautla">Huautla</option>
-                            <option value="Huazalingo">Huazalingo</option>
-                            <option value="Huehuetla">Huehuetla</option>
-                            <option value="Huejutla de Reyes">Huejutla de Reyes</option>
-                            <option value="Huichapan">Huichapan</option>
-                            <option value="Ixmiquilpan">Ixmiquilpan</option>
-                            <option value="Jacala de Ledezma">Jacala de Ledezma</option>
-                            <option value="Jaltocán">Jaltocán</option>
-                            <option value="Juárez Hidalgo">Juárez Hidalgo</option>
-                            <option value="La Misión">La Misión</option>
-                            <option value="Lolotla">Lolotla</option>
-                            <option value="Metepec">Metepec</option>
-                            <option value="Metztitlán">Metztitlán</option>
-                            <option value="Mineral de la Reforma">Mineral de la Reforma</option>
-                            <option value="Mineral del Chico">Mineral del Chico</option>
-                            <option value="Mineral del Monte">Mineral del Monte</option>
-                            <option value="Mixquiahuala de Juárez">Mixquiahuala de Juárez</option>
-                            <option value="Molango de Escamilla">Molango de Escamilla</option>
-                            <option value="Nicolás Flores">Nicolás Flores</option>
-                            <option value="Nopala de Villagrán">Nopala de Villagrán</option>
-                            <option value="Omitlán de Juárez">Omitlán de Juárez</option>
                             <option value="Pachuca de Soto">Pachuca de Soto</option>
-                            <option value="Pacula">Pacula</option>
-                            <option value="Pisaflores">Pisaflores</option>
-                            <option value="Progreso de Obregón">Progreso de Obregón</option>
-                            <option value="San Agustín Metzquititlán">San Agustín Metzquititlán</option>
-                            <option value="San Agustín Tlaxiaca">San Agustín Tlaxiaca</option>
-                            <option value="San Bartolo Tutotepec">San Bartolo Tutotepec</option>
-                            <option value="San Felipe Orizatlán">San Felipe Orizatlán</option>
-                            <option value="San Salvador">San Salvador</option>
-                            <option value="Santiago de Anaya">Santiago de Anaya</option>
-                            <option value="Santiago Tulantepec">Santiago Tulantepec</option>
-                            <option value="Singuilucan">Singuilucan</option>
-                            <option value="Tasquillo">Tasquillo</option>
-                            <option value="Tecozautla">Tecozautla</option>
-                            <option value="Tenango de Doria">Tenango de Doria</option>
-                            <option value="Tepeapulco">Tepeapulco</option>
-                            <option value="Tepehuacán de Guerrero">Tepehuacán de Guerrero</option>
-                            <option value="Tepeji del Río">Tepeji del Río</option>
-                            <option value="Tepetitlán">Tepetitlán</option>
-                            <option value="Tetepango">Tetepango</option>
-                            <option value="Tezontepec de Aldama">Tezontepec de Aldama</option>
-                            <option value="Tianguistengo">Tianguistengo</option>
-                            <option value="Tizayuca">Tizayuca</option>
-                            <option value="Tlahuelilpan">Tlahuelilpan</option>
-                            <option value="Tlahuiltepa">Tlahuiltepa</option>
-                            <option value="Tlanalapa">Tlanalapa</option>
-                            <option value="Tlanchinol">Tlanchinol</option>
-                            <option value="Tlaxcoapan">Tlaxcoapan</option>
-                            <option value="Tolcayuca">Tolcayuca</option>
-                            <option value="Tula de Allende">Tula de Allende</option>
+                            <option value="Mineral de la Reforma">Mineral de la Reforma</option>
                             <option value="Tulancingo de Bravo">Tulancingo de Bravo</option>
-                            <option value="Villa de Tezontepec">Villa de Tezontepec</option>
-                            <option value="Xochiatipan">Xochiatipan</option>
-                            <option value="Xochicoatlán">Xochicoatlán</option>
-                            <option value="Yahualica">Yahualica</option>
-                            <option value="Zacualtipán de Ángeles">Zacualtipán de Ángeles</option>
-                            <option value="Zapotlán de Juárez">Zapotlán de Juárez</option>
-                            <option value="Zempoala">Zempoala</option>
-                            <option value="Zimapán">Zimapán</option>
+                            <option value="Tula de Allende">Tula de Allende</option>
+                            <option value="Huejutla de Reyes">Huejutla de Reyes</option>
+                            <option value="Ixmiquilpan">Ixmiquilpan</option>
+                            <option value="Actopan">Actopan</option>
+                            <option value="Tizayuca">Tizayuca</option>
+                            <option value="Zacualtipán">Zacualtipán</option>
+                            <option value="Apan">Apan</option>
+                            <option value="Huichapan">Huichapan</option>
+                            <option value="Jacala">Jacala</option>
                         </select>
                     </div>
 
@@ -255,7 +186,11 @@
 
         <!-- PÁGINA 3: RESULTADOS -->
         <section id="resultados" class="page">
-            <button class="btn-back" onclick="nav('inicio')">← Regresar a Inicio</button>
+            <div class="results-header">
+                <button class="btn-back" onclick="nav('inicio')">← Regresar a Inicio</button>
+                <button class="btn-csv" onclick="descargarCSV()">📥 Descargar Base de Datos (CSV)</button>
+            </div>
+
             <h2>Resultados y Estadísticas</h2>
 
             <!-- Filtros -->
@@ -278,14 +213,31 @@
                 </div>
             </div>
 
-            <div class="results-container">
-                <div class="chart-container">
-                    <h3>Totales de Cloro Residual por Distrito</h3>
-                    <canvas id="myChart"></canvas>
-                </div>
+            <!-- Mapa de Geolocalización -->
+            <div style="margin-bottom: 20px;">
+                <h3>Mapa de Monitoreos</h3>
                 <div id="map"></div>
             </div>
 
+            <!-- Gráficas Estadísticas -->
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <h3>Registros por Distrito</h3>
+                    <canvas id="chartDistrito"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Registros por Cloro Residual (mg/L)</h3>
+                    <canvas id="chartCloro"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3>Monitoreos por Mes</h3>
+                    <canvas id="chartMes"></canvas>
+                </div>
+            </div>
+
+            <!-- Tabla de Resultados -->
             <div class="table-container" style="margin-top: 20px;">
                 <h3>Tabla General de Resultados</h3>
                 <div style="overflow-x:auto;">
@@ -297,6 +249,7 @@
                                 <th>Localidad</th>
                                 <th>Cloro Residual</th>
                                 <th>Fecha</th>
+                                <th>Hora</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -313,8 +266,11 @@
 
     <script>
         let map;
-        let chartInstance;
+        let chartDistritoInstance;
+        let chartCloroInstance;
+        let chartMesInstance;
         let datosOriginales = [];
+        let datosFiltrados = [];
 
         function nav(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -356,16 +312,17 @@
 
         async function cargarDatos() {
             datosOriginales = await window.obtenerDeFirebase();
-            renderizarTodo(datosOriginales);
+            datosFiltrados = [...datosOriginales];
+            renderizarTodo(datosFiltrados);
         }
 
         function aplicarFiltros() {
             const fDist = document.getElementById('filterDistrito').value.toLowerCase();
             const fMun = document.getElementById('filterMunicipio').value.toLowerCase();
             const fLoc = document.getElementById('filterLocalidad').value.toLowerCase();
-            const fMes = document.getElementById('filterMes').value; // AAAA-MM
+            const fMes = document.getElementById('filterMes').value;
 
-            const filtrados = datosOriginales.filter(row => {
+            datosFiltrados = datosOriginales.filter(row => {
                 const matchDist = row.distrito ? row.distrito.toLowerCase().includes(fDist) : true;
                 const matchMun = row.municipio ? row.municipio.toLowerCase().includes(fMun) : true;
                 const matchLoc = row.localidad ? row.localidad.toLowerCase().includes(fLoc) : true;
@@ -373,15 +330,18 @@
                 return matchDist && matchMun && matchLoc && matchMes;
             });
 
-            renderizarTodo(filtrados);
+            renderizarTodo(datosFiltrados);
         }
 
         function renderizarTodo(datos) {
             generarMapa(datos);
-            generarGrafica(datos);
+            generarGraficaDistrito(datos);
+            generarGraficaCloro(datos);
+            generarGraficaMes(datos);
             generarTabla(datos);
         }
 
+        // 1. Mapa de geolocalización
         function generarMapa(datos) {
             if(!map) {
                 map = L.map('map').setView([20.1010, -98.7591], 8);
@@ -396,37 +356,110 @@
                 if(row.lat && row.lon) {
                     L.marker([parseFloat(row.lat), parseFloat(row.lon)])
                      .addTo(map)
-                     .bindPopup(`<b>${row.localidad}</b><br>Distrito: ${row.distrito}<br>Cloro: ${row.cloro}<br>Fecha: ${row.fecha}`);
+                     .bindPopup(`<b>${row.localidad}</b><br>Distrito: ${row.distrito}<br>Cloro: ${row.cloro} mg/L<br>Fecha: ${row.fecha}`);
                 }
             });
             setTimeout(() => { map.invalidateSize(); }, 300);
         }
 
-        function generarGrafica(datos) {
+        // 2. Gráfica por Distrito
+        function generarGraficaDistrito(datos) {
             const conteo = {};
             datos.forEach(row => {
                 let dist = row.distrito;
                 if(dist) conteo[dist] = (conteo[dist] || 0) + 1;
             });
 
-            const ctx = document.getElementById('myChart').getContext('2d');
-            if(chartInstance) chartInstance.destroy();
+            const ctx = document.getElementById('chartDistrito').getContext('2d');
+            if(chartDistritoInstance) chartDistritoInstance.destroy();
             
-            chartInstance = new Chart(ctx, {
+            chartDistritoInstance = new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: Object.keys(conteo),
                     datasets: [{
-                        label: 'Registros por Distrito',
+                        label: 'Registros',
                         data: Object.values(conteo),
                         backgroundColor: 'rgba(0, 86, 179, 0.6)',
                         borderColor: 'rgba(0, 86, 179, 1)',
                         borderWidth: 1
                     }]
-                }
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
             });
         }
 
+        // 3. Gráfica por Cloro Residual
+        function generarGraficaCloro(datos) {
+            const niveles = ["0", "0.2", "0.5", "0.8", "1.0", "1.5", "2", "3"];
+            const conteo = {};
+            niveles.forEach(n => conteo[n] = 0);
+
+            datos.forEach(row => {
+                if(row.cloro !== undefined && row.cloro !== null) {
+                    const c = String(row.cloro).trim();
+                    if(conteo.hasOwnProperty(c)) conteo[c]++;
+                    else conteo[c] = (conteo[c] || 0) + 1;
+                }
+            });
+
+            const ctx = document.getElementById('chartCloro').getContext('2d');
+            if(chartCloroInstance) chartCloroInstance.destroy();
+
+            chartCloroInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(conteo).map(v => v + ' mg/L'),
+                    datasets: [{
+                        label: 'Cantidad de Muestras',
+                        data: Object.values(conteo),
+                        backgroundColor: 'rgba(40, 167, 69, 0.6)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // 4. Gráfica por Mes
+        function generarGraficaMes(datos) {
+            const conteoMes = {};
+
+            datos.forEach(row => {
+                if(row.fecha) {
+                    const mesAnio = row.fecha.substring(0, 7); // AAAA-MM
+                    if(mesAnio) {
+                        conteoMes[mesAnio] = (conteoMes[mesAnio] || 0) + 1;
+                    }
+                }
+            });
+
+            const mesesOrdenados = Object.keys(conteoMes).sort();
+            const valores = mesesOrdenados.map(m => conteoMes[m]);
+
+            const ctx = document.getElementById('chartMes').getContext('2d');
+            if(chartMesInstance) chartMesInstance.destroy();
+
+            chartMesInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: mesesOrdenados,
+                    datasets: [{
+                        label: 'Total de Monitoreos',
+                        data: valores,
+                        backgroundColor: 'rgba(23, 162, 184, 0.2)',
+                        borderColor: 'rgba(23, 162, 184, 1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // 5. Tabla General
         function generarTabla(datos) {
             const tbody = document.querySelector('#dataTable tbody');
             tbody.innerHTML = '';
@@ -437,8 +470,53 @@
                     <td>${row.localidad || ''}</td>
                     <td>${row.cloro || ''}</td>
                     <td>${row.fecha || ''}</td>
+                    <td>${row.hora || ''}</td>
                 </tr>`;
             });
+        }
+
+        // 6. Función para Descargar CSV completo
+        function descargarCSV() {
+            if (!datosOriginales || datosOriginales.length === 0) {
+                alert("No hay registros en la base de datos para descargar.");
+                return;
+            }
+
+            const encabezados = [
+                "Distrito", "Municipio", "Localidad", "Calle", 
+                "Numero Exterior", "Codigo Postal", "Fecha", "Hora", 
+                "Cloro Residual", "Latitud", "Longitud", "Observaciones"
+            ];
+
+            let csvContent = encabezados.join(",") + "\n";
+
+            datosOriginales.forEach(row => {
+                const fila = [
+                    `"${(row.distrito || '').replace(/"/g, '""')}"`,
+                    `"${(row.municipio || '').replace(/"/g, '""')}"`,
+                    `"${(row.localidad || '').replace(/"/g, '""')}"`,
+                    `"${(row.calle || '').replace(/"/g, '""')}"`,
+                    `"${(row.numExt || '').replace(/"/g, '""')}"`,
+                    `"${(row.cp || '').replace(/"/g, '""')}"`,
+                    `"${(row.fecha || '').replace(/"/g, '""')}"`,
+                    `"${(row.hora || '').replace(/"/g, '""')}"`,
+                    `"${(row.cloro || '').replace(/"/g, '""')}"`,
+                    `"${(row.lat || '').replace(/"/g, '""')}"`,
+                    `"${(row.lon || '').replace(/"/g, '""')}"`,
+                    `"${(row.obs || '').replace(/"/g, '""')}"`
+                ];
+                csvContent += fila.join(",") + "\n";
+            });
+
+            // \uFEFF añade el Byte Order Mark (BOM) para que Excel reconozca eñes y acentos correctamente
+            const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Monitoreo_Cloro_Hidalgo_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
